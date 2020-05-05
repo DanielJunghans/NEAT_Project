@@ -13,7 +13,7 @@ import sys
 #########################################
 ### Fitness Threshold and Random Seed ###
 
-TrainingThreshold = 7000000000
+TrainingThreshold = 20000
 TestingThreshold = 7000
 SizeOfTrainingData = 0.7
 Generations = 15000

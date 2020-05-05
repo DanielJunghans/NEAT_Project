@@ -12,6 +12,7 @@
 ##################################
 # Setup relevant directories
 DATA_DIR=/mnt/scratch/junghan2/NEAT/Data
+ProjectDirectory=/mnt/scratch/junghan2/NEAT_Project
 
 ##################################
 NUMBER_OF_GENS=15000
@@ -29,6 +30,10 @@ RUN_DIR=${DATA_DIR}/${NAME}/
 # make a run directory
 mkdir -p ${RUN_DIR}
 
-echo "python3 ./TeslaPrediction.py ${RUN_DIR} ${SEED} > run.log" > ./cmd.txt
+cd ${ProjectDirectory}
+
+echo "python3 ./TeslaPrediction.py ${RUN_DIR} ${SEED} > run.log" >> ./cmd.txt
+
+source ./VirtualEnvironment/bin/activate
 
 python3 ./TeslaPrediction.py ${RUN_DIR} ${SEED} > ${RUN_DIR}run.log 
