@@ -26,8 +26,7 @@ Directory = str(Arg_List[1])
 Seed = int(Arg_List[2])
 random.seed(Seed)
 
-print(Arg_List)
-sys.exit(-1)
+
 
 
 #########################################
