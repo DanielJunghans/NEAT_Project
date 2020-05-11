@@ -82,13 +82,14 @@ A = open(Directory+'AverageError.csv','w')
 writer1 = csv.writer(A)
 ErrorColumns = ['AVG Training Error']+['AVG Testing Error']
 writer1.writerow(ErrorColumns)
+A.flush()
 
 # This CSV will keep track of the expected and actual outputs
 B = open(Directory+'TestingOutputs.csv','w')
 writer2 = csv.writer(B)
 # The first line of the CSV will contain the expected outputs
 writer2.writerow(CSV_Output)
-
+B.flush()
 
 #########################################
 #########################################
@@ -109,6 +110,7 @@ def eval_genomes(genomes, config):
 ####### creating the run function #######
 
 def run(config_file):
+    global counter
     # These lines load in the configuration file
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -131,9 +133,9 @@ def run(config_file):
         # This line is setting the training error equal to the error of the best genome
         training_error = abs(winner.fitness)
 
-#########################################
-#########################################
-##Fitness Function For Testing Dataset ##  
+        #########################################
+        #########################################
+        ##Fitness Function For Testing Dataset ##  
 
         # This if statement checks to see if the training error is low enough and will 
         # run the best genome on the testing data
@@ -151,12 +153,18 @@ def run(config_file):
             writer2.writerow(Outputs)    
         # This line will add a new row to the CSV containing the average errors for the training and testing datasets 
         writer1.writerow([training_error/len(Training_Input), abs(testing_error)/len(Testing_Input)])
+        A.flush()
+        B.flush()
+        
 
-
-        counter =+ 1
+        
+        counter += 100
+        print('Generation=', counter)
         if counter > Generations:
             break
            
+
+
 #############################################
 #############################################
 ###### Determining path to config file ######
