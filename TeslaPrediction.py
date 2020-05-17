@@ -13,7 +13,7 @@ import sys
 #########################################
 ### Fitness Threshold and Random Seed ###
 
-TrainingThreshold = 20000
+TrainingThreshold = 10000
 TestingThreshold = 7000
 SizeOfTrainingData = 0.7
 Generations = 15000
@@ -34,7 +34,7 @@ random.seed(Seed)
 #### Loading and splitting the data #####
 
 #this opens the file with inputs
-with open('cleantsladata.csv') as f:
+with open('OneInputExperiment.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
     content = [tuple(map(float, line)) for line in data[1:]]
