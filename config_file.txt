@@ -2,14 +2,14 @@
 [NEAT]
 fitness_criterion     = max
 fitness_threshold     = 0
-pop_size              = 300
+pop_size              = 100
 reset_on_extinction   = False
 
 [DefaultGenome]
 # node activation options
 activation_default      = abs
-activation_mutate_rate  = 0.1
-activation_options      = abs exp square cube identity hat clamped gauss inv log relu elu lelu selu sigmoid sin softplus tanh
+activation_mutate_rate  = 0.05
+activation_options      = abs exp square cube identity hat clamped gauss inv log sigmoid sin softplus tanh
 
 # node aggregation options
 aggregation_default     = sum
