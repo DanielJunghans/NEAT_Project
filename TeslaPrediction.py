@@ -18,6 +18,7 @@ TestingThreshold = 5000
 SizeOfTrainingData = 0.7
 Generations = 15000
 counter = 0
+sample = .25
 
 
 #argument list
@@ -64,11 +65,9 @@ Training_Input = Input_List[:split]
 Testing_Input = Input_List[split:]
 
 #this splits the outputs
-split2 = int(SizeOfTrainingData * len(Output_List))
-Training_Output = Output_List[:split2]
-Testing_Output= Output_List[split2:]
-CSV_Output = CSV_Output_List[split2:]
-
+Training_Output = Output_List[:split]
+Testing_Output= Output_List[split:]
+CSV_Output = CSV_Output_List[split:]
 
 # This line prepares the training data to be shuffled
 Training_Data = list(zip(Training_Input,Training_Output))
@@ -126,10 +125,19 @@ def run(config_file):
         #These lines will shuffle the training data set every n generations
         random.shuffle(Training_Data)
         Training_Input, Training_Output = zip(*Training_Data)
+        
         # This line is initializing the testing error at zero
         testing_error = 0
-        # Run for up to 1000 generations.
-        winner = p.run(eval_genomes, 100)
+
+        
+        #These three lines sample the first n% of the shuffled data
+        split2 = int(sample * len(Training_Input))
+        Training_Input = Training_Input[:split2]
+        Training_Output = Training_Output[:split2]
+       
+
+        # Run for up to 100 generations.
+        winner = p.run(eval_genomes, 50)
         # This line is setting the training error equal to the error of the best genome
         training_error = abs(winner.fitness)
 
