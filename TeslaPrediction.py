@@ -13,8 +13,8 @@ import sys
 #########################################
 ### Fitness Threshold and Random Seed ###
 
-TrainingThreshold = 10000
-TestingThreshold = 5000
+TrainingThreshold = 100.0
+TestingThreshold = 1.0
 SizeOfTrainingData = 0.7
 Generations = 15000
 counter = 0
@@ -63,6 +63,8 @@ for out in range(1,len(content)):
 split = int(SizeOfTrainingData * len(Input_List))
 Training_Input = Input_List[:split]
 Testing_Input = Input_List[split:]
+TrainingSetSize = len(Training_Input)
+
 
 #this splits the outputs
 Training_Output = Output_List[:split]
@@ -160,13 +162,13 @@ def run(config_file):
             # This line will add a new row to the CSV containing all of the outputs from the testing data
             writer2.writerow(Outputs)    
         # This line will add a new row to the CSV containing the average errors for the training and testing datasets 
-        writer1.writerow([training_error/len(Training_Input), abs(testing_error)/len(Testing_Input)])
+        writer1.writerow([training_error/TrainingSetSize, abs(testing_error)/len(Testing_Input)])
         A.flush()
         B.flush()
         
 
         
-        counter += 100
+        counter += 50
         print('Generation=', counter)
         if counter > Generations:
             break
