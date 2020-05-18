@@ -14,7 +14,7 @@ import sys
 ### Fitness Threshold and Random Seed ###
 
 TrainingThreshold = 10000
-TestingThreshold = 7000
+TestingThreshold = 5000
 SizeOfTrainingData = 0.7
 Generations = 15000
 counter = 0
