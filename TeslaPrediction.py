@@ -13,7 +13,7 @@ import sys
 #########################################
 ### Fitness Threshold and Random Seed ###
 
-TrainingThreshold = 100.0
+TrainingThreshold = 100000.0
 TestingThreshold = 1.0
 SizeOfTrainingData = 0.7
 Generations = 15000
@@ -35,7 +35,7 @@ random.seed(Seed)
 #### Loading and splitting the data #####
 
 #this opens the file with inputs
-with open('OneInputExperiment.csv') as f:
+with open('cleantsladata.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
     content = [tuple(map(float, line)) for line in data[1:]]
@@ -74,6 +74,12 @@ CSV_Output = CSV_Output_List[split:]
 # This line prepares the training data to be shuffled
 Training_Data = list(zip(Training_Input,Training_Output))
 
+print(len(Input_List))
+print(len(Output_List))
+print(Input_List[0])
+print(Output_List[0])
+
+
 #########################################
 #########################################
 ################## CSV ##################
@@ -104,7 +110,7 @@ def eval_genomes(genomes, config):
         net = neat.nn.FeedForwardNetwork.create(genome, config)
         for xi, xo in zip(Training_Input, Training_Output):
             output = net.activate(xi)
-            genome.fitness -= abs(output[0] - xo[0])
+            genome.fitness -= abs(xo[0] - output[0])
 
 #########################################
 #########################################
@@ -156,7 +162,7 @@ def run(config_file):
             # This for loop runs the best genome on the testing data
             for ti, to in zip(Testing_Input, Testing_Output): 
                 Test_Output = winner_net.activate(ti)
-                testing_error -= abs(Test_Output[0] - to[0])
+                testing_error -= abs(to[0] - Test_Output[0])
                 Outputs.append(Test_Output[0])
 
             # This line will add a new row to the CSV containing all of the outputs from the testing data
