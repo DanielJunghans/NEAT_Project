@@ -8,6 +8,7 @@ import neat
 import csv
 import random
 import sys
+import math
 
 #########################################
 #########################################
@@ -16,10 +17,9 @@ import sys
 TrainingThreshold = 100000.0
 TestingThreshold = 1.0
 SizeOfTrainingData = 0.7
-Generations = 15000
+Generations = 20000
 counter = 0
 sample = .25
-
 
 #argument list
 Arg_List = sys.argv
@@ -27,7 +27,23 @@ Directory = str(Arg_List[1])
 Seed = int(Arg_List[2])
 random.seed(Seed)
 
+#########################################
+#########################################
+##### creating functions with a cap #####
 
+
+
+def custom_square(x):
+    #1.3*10^154 is the square root of the max float number
+    if x > 1.3407807929942596e+154 or x < -1.3407807929942596e+154:
+        x = 0
+    return(x ** 2)
+
+def custom_cube(x):
+    #5.6*10^102 is the cube root of the max float number and 2.8*0^-103 is the cube root of the min float number
+    if x > 5.643803094122288e+102 or x < 2.8126442852362986e-103:
+        x = 0
+    return(x ** 3)
 
 
 #########################################
@@ -74,10 +90,6 @@ CSV_Output = CSV_Output_List[split:]
 # This line prepares the training data to be shuffled
 Training_Data = list(zip(Training_Input,Training_Output))
 
-print(len(Input_List))
-print(len(Output_List))
-print(Input_List[0])
-print(Output_List[0])
 
 
 #########################################
@@ -97,6 +109,8 @@ writer2 = csv.writer(B)
 # The first line of the CSV will contain the expected outputs
 writer2.writerow(CSV_Output)
 B.flush()
+
+
 
 #########################################
 #########################################
@@ -122,6 +136,13 @@ def run(config_file):
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_file)
+    
+    # These two lines add the custom functions with capped values to the config file
+    # These lines must come before the creation of the population
+    config.genome_config.add_activation('my_square_function', custom_square)
+    config.genome_config.add_activation('my_cube_function', custom_cube)
+    
+    
     # Create the population, which is the top-level object for a NEAT run.
     p = neat.Population(config)
     # Initializing the training and testing error variables
@@ -160,13 +181,16 @@ def run(config_file):
             winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
             Outputs = []
             # This for loop runs the best genome on the testing data
+
             for ti, to in zip(Testing_Input, Testing_Output): 
                 Test_Output = winner_net.activate(ti)
                 testing_error -= abs(to[0] - Test_Output[0])
                 Outputs.append(Test_Output[0])
 
             # This line will add a new row to the CSV containing all of the outputs from the testing data
-            writer2.writerow(Outputs)    
+            writer2.writerow(Outputs)
+
+
         # This line will add a new row to the CSV containing the average errors for the training and testing datasets 
         writer1.writerow([training_error/TrainingSetSize, abs(testing_error)/len(Testing_Input)])
         A.flush()
@@ -177,6 +201,12 @@ def run(config_file):
         counter += 50
         print('Generation=', counter)
         if counter > Generations:
+            
+            #this line will print out the genome of the best organism
+            with open('GenomeStructure.txt','w') as GenomeStructure:
+                GenomeStructure.write('\nBest genome:\n{!s}'.format(winner))
+
+            #this line will stop the code
             break
            
 
