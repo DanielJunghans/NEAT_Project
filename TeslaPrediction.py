@@ -10,6 +10,7 @@ import random
 import sys
 import math
 
+
 #########################################
 #########################################
 ### Fitness Threshold and Random Seed ###
@@ -17,7 +18,7 @@ import math
 TrainingThreshold = 100000.0
 TestingThreshold = 1.0
 SizeOfTrainingData = 0.7
-Generations = 20000
+Generations = 15000
 counter = 0
 sample = .25
 
@@ -30,8 +31,6 @@ random.seed(Seed)
 #########################################
 #########################################
 ##### creating functions with a cap #####
-
-
 
 def custom_square(x):
     #1.3*10^154 is the square root of the max float number
@@ -51,7 +50,7 @@ def custom_cube(x):
 #### Loading and splitting the data #####
 
 #this opens the file with inputs
-with open('cleantsladata.csv') as f:
+with open('UnNormalized.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
     content = [tuple(map(float, line)) for line in data[1:]]
@@ -90,8 +89,6 @@ CSV_Output = CSV_Output_List[split:]
 # This line prepares the training data to be shuffled
 Training_Data = list(zip(Training_Input,Training_Output))
 
-
-
 #########################################
 #########################################
 ################## CSV ##################
@@ -110,6 +107,8 @@ writer2 = csv.writer(B)
 writer2.writerow(CSV_Output)
 B.flush()
 
+#this line creates the text file containing the best genome structure
+GenomeStructure = open('GenomeStructure.txt','w')
 
 
 #########################################
@@ -132,6 +131,7 @@ def eval_genomes(genomes, config):
 
 def run(config_file):
     global counter
+    
     # These lines load in the configuration file
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -167,6 +167,9 @@ def run(config_file):
 
         # Run for up to 100 generations.
         winner = p.run(eval_genomes, 50)
+        
+
+
         # This line is setting the training error equal to the error of the best genome
         training_error = abs(winner.fitness)
 
@@ -196,21 +199,18 @@ def run(config_file):
         A.flush()
         B.flush()
         
-
-        
         counter += 50
         print('Generation=', counter)
-        if counter > Generations:
-            
-            #this line will print out the genome of the best organism
-            with open('GenomeStructure.txt','w') as GenomeStructure:
-                GenomeStructure.write('\nBest genome:\n{!s}'.format(winner))
+        if counter == Generations:
 
+            #this line keeps track of the best genome structure
+            GenomeStructure.write('\nBest genome:\n{!s}'.format(winner))
+            
             #this line will stop the code
             break
            
-
-
+        
+        
 #############################################
 #############################################
 ###### Determining path to config file ######
