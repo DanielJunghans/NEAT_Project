@@ -9,6 +9,7 @@ import csv
 import random
 import sys
 import math
+import numpy as np
 
 
 #########################################
@@ -18,9 +19,10 @@ import math
 TrainingThreshold = 100000.0
 TestingThreshold = 1.0
 SizeOfTrainingData = 0.7
-Generations = 15000
+Generations = 100
 counter = 0
 sample = .25
+TrainingGenerations = 50
 
 #argument list
 Arg_List = sys.argv
@@ -108,7 +110,27 @@ writer2.writerow(CSV_Output)
 B.flush()
 
 #this line creates the text file containing the best genome structure
-GenomeStructure = open('GenomeStructure.txt','w')
+GenomeStructure = open(Directory+'GenomeStructure.txt','w')
+
+#this line will create a csv that will track population statistics
+C = open(Directory+'PopulationStats.csv','w')
+writer3 = csv.writer(C)
+Columns = ['NumberOfSpecies']
+writer3.writerow(Columns)
+C.flush()
+
+#########################################
+#########################################
+#####Species data collection function####
+
+def data_collection(stats,gens):
+    species_sizes = stats.get_species_sizes()
+    randomlist = range(1,gens)
+    for generations in randomlist:
+        #for ever generation count the number of unique populations in a list and write them
+        writer3.writerow([len(np.unique(species_sizes[generations]))])
+        C.flush()
+
 
 
 #########################################
@@ -137,6 +159,8 @@ def run(config_file):
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_file)
     
+
+
     # These two lines add the custom functions with capped values to the config file
     # These lines must come before the creation of the population
     config.genome_config.add_activation('my_square_function', custom_square)
@@ -145,6 +169,12 @@ def run(config_file):
     
     # Create the population, which is the top-level object for a NEAT run.
     p = neat.Population(config)
+
+
+    #stats functions
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+
     # Initializing the training and testing error variables
     training_error = 100
     testing_error = 100000
@@ -166,7 +196,7 @@ def run(config_file):
        
 
         # Run for up to 100 generations.
-        winner = p.run(eval_genomes, 50)
+        winner = p.run(eval_genomes, TrainingGenerations)
         
 
 
@@ -208,9 +238,9 @@ def run(config_file):
             
             #this line will stop the code
             break
-           
-        
-        
+    #function that collects species data
+    data_collection(stats,Generations)
+            
 #############################################
 #############################################
 ###### Determining path to config file ######
@@ -223,3 +253,4 @@ if __name__ == '__main__':
 #############################################
 #############################################
 #############################################
+
