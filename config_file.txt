@@ -2,12 +2,12 @@
 [NEAT]
 fitness_criterion     = max
 fitness_threshold     = 0
-pop_size              = 400
+pop_size              = 1500
 reset_on_extinction   = False
 
 [DefaultGenome]
 # node activation options
-activation_default      = exp
+activation_default      = random
 activation_mutate_rate  = 0.30
 activation_options      = exp my_square_function my_cube_function abs identity hat clamped gauss inv log sigmoid sin softplus tanh
 
@@ -45,7 +45,7 @@ node_add_prob           = 0.35
 node_delete_prob        = 0.2
 
 # network parameters
-num_hidden              = 2
+num_hidden              = 4
 num_inputs              = 19
 num_outputs             = 1
 
@@ -68,7 +68,7 @@ weight_mutate_rate      = 0.8
 weight_replace_rate     = 0.1
 
 [DefaultSpeciesSet]
-compatibility_threshold = 2.4
+compatibility_threshold = 1.5
 
 [DefaultStagnation]
 species_fitness_func = max
