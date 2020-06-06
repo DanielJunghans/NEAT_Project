@@ -200,6 +200,7 @@ def run(config_file):
         
 
 
+
         # This line is setting the training error equal to the error of the best genome
         training_error = abs(winner.fitness)
 

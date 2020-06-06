@@ -8,7 +8,7 @@ reset_on_extinction   = False
 [DefaultGenome]
 # node activation options
 activation_default      = random
-activation_mutate_rate  = 0.30
+activation_mutate_rate  = 0.1
 activation_options      = exp my_square_function my_cube_function abs identity hat clamped gauss inv log sigmoid sin softplus tanh
 
 # node aggregation options
