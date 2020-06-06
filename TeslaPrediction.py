@@ -19,7 +19,7 @@ import numpy as np
 TrainingThreshold = 100000.0
 TestingThreshold = 1.0
 SizeOfTrainingData = 0.7
-Generations = 15000
+Generations = 10000
 counter = 0
 sample = .25
 TrainingGenerations = 50
