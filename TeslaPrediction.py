@@ -10,7 +10,10 @@ import random
 import sys
 import math
 import numpy as np
-
+import LexicaseReproduction
+import Genome
+import Population
+import Species
 
 #########################################
 #########################################
@@ -88,8 +91,14 @@ Training_Output = Output_List[:split]
 Testing_Output= Output_List[split:]
 CSV_Output = CSV_Output_List[split:]
 
+
+
+
 # This line prepares the training data to be shuffled
 Training_Data = list(zip(Training_Input,Training_Output))
+
+
+
 
 #########################################
 #########################################
@@ -133,19 +142,34 @@ def data_collection(stats,gens):
 
 
 
+
+
+
+
+
 #########################################
 #########################################
 ##Fitness Function for Training Dataset##
 
 def eval_genomes(genomes, config):
     
+
     #This for loop will run every genome and determine its fitness
     for genome_id, genome in genomes:
         genome.fitness = 0.0
+
+        #This line creates genome.lexicase which will track of the error for every test case
+        genome.lexicase = []
+
+
         net = neat.nn.FeedForwardNetwork.create(genome, config)
         for xi, xo in zip(Training_Input, Training_Output):
             output = net.activate(xi)
             genome.fitness -= abs(xo[0] - output[0])
+            
+            #this line will append the error for all test cases
+            genome.lexicase.append(abs(xo[0] - output[0]))
+    print(genome.lexicase[0])
 
 #########################################
 #########################################
