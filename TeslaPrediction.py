@@ -10,10 +10,7 @@ import random
 import sys
 import math
 import numpy as np
-import LexicaseReproduction
-import Genome
-import Population
-import Species
+
 
 #########################################
 #########################################
@@ -162,15 +159,14 @@ def eval_genomes(genomes, config):
         genome.lexicase = []
 
 
-        net = neat.nn.FeedForwardNetwork.create(genome, config)
+        net = neat.nn.RecurrentNetwork.create(genome, config)
         for xi, xo in zip(Training_Input, Training_Output):
             output = net.activate(xi)
             genome.fitness -= abs(xo[0] - output[0])
             
             #this line will append the error for all test cases
             genome.lexicase.append(abs(xo[0] - output[0]))
-    print(genome.lexicase[0])
-
+    
 #########################################
 #########################################
 ####### creating the run function #######
@@ -236,7 +232,7 @@ def run(config_file):
         # run the best genome on the testing data
         if training_error <= TrainingThreshold:
             testing_error = 0
-            winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
+            winner_net = neat.nn.RecurrentNetwork.create(winner, config)
             Outputs = []
             # This for loop runs the best genome on the testing data
 

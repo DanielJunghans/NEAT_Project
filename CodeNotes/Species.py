@@ -1,8 +1,24 @@
 """Divides the population into species based on genomic distances."""
 from itertools import count
 
+
+
+
 from neat.config import ConfigParameter, DefaultClassConfig
 from neat.math_util import mean, stdev
+
+
+
+#point species at reproduction file
+#point species at population file 
+
+#pick random representitive to start
+
+#set the new representitive to whatever genome has the lowest error
+
+
+
+
 
 
 class Species(object):
@@ -80,9 +96,13 @@ class DefaultSpeciesSet(DefaultClassConfig):
     ###########################
     ###########################
     #Gut this entire thing and put it into a list
+    #what is being returned?
 
 
+    #While Population:
+        #member_dict = dict((GenomeID, population[GenomeID]) for GenomeID in Population)
 
+    
 
 
 
@@ -128,6 +148,16 @@ class DefaultSpeciesSet(DefaultClassConfig):
             new_members[sid] = [new_rid]
             unspeciated.remove(new_rid)
 
+
+
+
+
+
+
+
+
+
+
         # Partition population into species based on genetic similarity.
         while unspeciated:
             gid = unspeciated.pop()
@@ -154,6 +184,9 @@ class DefaultSpeciesSet(DefaultClassConfig):
         # Update species collection based on new speciation.
         self.genome_to_species = {}
         for sid, rid in new_representatives.items():
+
+            print(sid)
+
             s = self.species.get(sid)
             if s is None:
                 s = Species(sid, generation)
@@ -163,13 +196,33 @@ class DefaultSpeciesSet(DefaultClassConfig):
             for gid in members:
                 self.genome_to_species[gid] = sid
 
+
+        #####################################
+        #####################################
+        #####################################
+        #These two lines are important because because they update population with the new species
+        #Basically this is putting the populations representitive(RID Representitive ID) with member dict
+        #member dict is a dictionary with genome ids and the genome for members. members is equal to new members
+        #and represents the amount of members per population
+
+
+            #all you need to do is set members equal to the population
+            #Then you need to need to set the representitive id to 1 to represent the only population
+
             member_dict = dict((gid, population[gid]) for gid in members)
             s.update(population[rid], member_dict)
+        #####################################
+        #####################################
+        #####################################
+            
+
 
         gdmean = mean(distances.distances.values())
         gdstdev = stdev(distances.distances.values())
         self.reporters.info(
             'Mean genetic distance {0:.3f}, standard deviation {1:.3f}'.format(gdmean, gdstdev))
+
+
 
     def get_species_id(self, individual_id):
         return self.genome_to_species[individual_id]

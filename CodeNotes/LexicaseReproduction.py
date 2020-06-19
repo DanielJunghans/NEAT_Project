@@ -260,6 +260,7 @@ class DefaultReproduction(DefaultClassConfig):
                 child.mutate(config.genome_config)
                 new_population[gid] = child
                 self.ancestors[gid] = (parent1_id, parent2_id)
+            
 
         return new_population
 
