@@ -2,7 +2,7 @@
 [NEAT]
 fitness_criterion     = max
 fitness_threshold     = 0
-pop_size              = 500
+pop_size              = 400
 reset_on_extinction   = False
 
 [DefaultGenome]
@@ -18,7 +18,7 @@ aggregation_options     = sum
 
 # node bias options
 bias_init_mean          = 0.0
-bias_init_stdev         = 1.0
+bias_init_stdev         = 3.0
 bias_max_value          = 100.0
 bias_min_value          = -100.0
 bias_mutate_power       = 0.5
@@ -41,11 +41,11 @@ feed_forward            = True
 initial_connection      = full_nodirect
 
 # node add/remove rates
-node_add_prob           = 0.05
-node_delete_prob        = 0.05
+node_add_prob           = 0.12
+node_delete_prob        = 0.1
 
 # network parameters
-num_hidden              = 4
+num_hidden              = 12
 num_inputs              = 19
 num_outputs             = 1
 
@@ -68,7 +68,7 @@ weight_mutate_rate      = 0.1
 weight_replace_rate     = 0.05
 
 [DefaultSpeciesSet]
-compatibility_threshold = 2.0
+compatibility_threshold = 1.7
 
 [DefaultStagnation]
 species_fitness_func = max
