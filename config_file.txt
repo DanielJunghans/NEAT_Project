@@ -2,7 +2,7 @@
 [NEAT]
 fitness_criterion     = max
 fitness_threshold     = 0
-pop_size              = 400
+pop_size              = 500
 reset_on_extinction   = False
 
 [DefaultGenome]
@@ -18,10 +18,10 @@ aggregation_options     = sum
 
 # node bias options
 bias_init_mean          = 0.0
-bias_init_stdev         = 3.0
+bias_init_stdev         = 10.0
 bias_max_value          = 100.0
 bias_min_value          = -100.0
-bias_mutate_power       = 0.5
+bias_mutate_power       = 5.0
 bias_mutate_rate        = 0.1
 bias_replace_rate       = 0.05
 
