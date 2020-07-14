@@ -52,7 +52,7 @@ def custom_cube(x):
 #### Loading and splitting the data #####
 
 #this opens the file with inputs
-with open('UnNormalized.csv') as f:
+with open('Gold.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
     content = [tuple(map(float, line)) for line in data[1:]]
@@ -63,7 +63,7 @@ for input in range(len(content)-1):
     Input_List.append(tuple(content[input]))
 
 #this opens the file with the expected outputs
-with open('tslaexpectedoutputs.csv') as a:
+with open('GoldExpectedOutputs.csv') as a:
     data2 = [line for line in csv.reader(a)]
     header2 = data2[0]
     output_content = [tuple(map(float,line)) for line in data2[1:]]
