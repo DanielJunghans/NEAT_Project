@@ -89,5 +89,5 @@ Training_Output = Output_List[:split]
 Testing_Output= Output_List[split:]
 CSV_Output = CSV_Output_List[split:]
 
-print(Training_Input[0])
-print(Training_Output[0])
+print(len(Training_Input))
+print(len(Testing_Input))
