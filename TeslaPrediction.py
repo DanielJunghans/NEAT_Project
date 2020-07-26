@@ -52,7 +52,7 @@ def custom_cube(x):
 #### Loading and splitting the data #####
 
 #this opens the file with inputs
-with open('Gold.csv') as f:
+with open('cleantsladata.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
     content = [tuple(map(float, line)) for line in data[1:]]
@@ -63,7 +63,7 @@ for input in range(len(content)-1):
     Input_List.append(tuple(content[input]))
 
 #this opens the file with the expected outputs
-with open('GoldExpectedOutputs.csv') as a:
+with open('tslaexpectedoutputs.csv') as a:
     data2 = [line for line in csv.reader(a)]
     header2 = data2[0]
     output_content = [tuple(map(float,line)) for line in data2[1:]]
@@ -154,19 +154,24 @@ def eval_genomes(genomes, config):
     #This for loop will run every genome and determine its fitness
     for genome_id, genome in genomes:
         genome.fitness = 0.0
-
-        #This line creates genome.lexicase which will track of the error for every test case
-        genome.lexicase = []
-
-
         net = neat.nn.RecurrentNetwork.create(genome, config)
         for xi, xo in zip(Training_Input, Training_Output):
             output = net.activate(xi)
-            genome.fitness -= abs(xo[0] - output[0])
+            #genome.fitness -= abs(xo[0] - output[0])
+            #1 stock price is going up #0 stock price is going down
+            if output[0] >= 0.5:
+                output[0] = 1.0
+            else:
+                output[0] = 0.0
+            #punishing type 1 error
+            if xo[0] == 0 and output[0] == 1:
+                genome.fitness -= 5.0
+            #punishing type 2 error
+            if xo[0] == 1 and output[0] == 0:
+                genome.fitness -= 3.0
             
-            #this line will append the error for all test cases
-            genome.lexicase.append(abs(xo[0] - output[0]))
-    
+
+           
 #########################################
 #########################################
 ####### creating the run function #######
@@ -238,7 +243,18 @@ def run(config_file):
 
             for ti, to in zip(Testing_Input, Testing_Output): 
                 Test_Output = winner_net.activate(ti)
-                testing_error -= abs(to[0] - Test_Output[0])
+                if Test_Output[0] >= 0.5:
+                    Test_Output[0] = 1.0
+                else:
+                    Test_Output[0] = 0.0
+                #punishing type 1 error
+                if to[0] == 0 and Test_Output[0] == 1:
+                    testing_error -= 5.0
+                #punishing type 2 error
+                if to[0] == 1 and Test_Output[0] == 0:
+                    testing_error -= 3.0
+
+                #testing_error -= abs(to[0] - Test_Output[0])
                 Outputs.append(Test_Output[0])
 
             # This line will add a new row to the CSV containing all of the outputs from the testing data
