@@ -52,7 +52,7 @@ def custom_cube(x):
 #### Loading and splitting the data #####
 
 #this opens the file with inputs
-with open('cleantsladata.csv') as f:
+with open('UnNormalized.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
     content = [tuple(map(float, line)) for line in data[1:]]
@@ -137,13 +137,6 @@ def data_collection(stats,gens):
         writer3.writerow([len(np.unique(species_sizes[generations]))])
         C.flush()
 
-
-
-
-
-
-
-
 #########################################
 #########################################
 ##Fitness Function for Training Dataset##
@@ -157,19 +150,15 @@ def eval_genomes(genomes, config):
         net = neat.nn.RecurrentNetwork.create(genome, config)
         for xi, xo in zip(Training_Input, Training_Output):
             output = net.activate(xi)
-            #genome.fitness -= abs(xo[0] - output[0])
             #1 stock price is going up #0 stock price is going down
             if output[0] >= 0.5:
                 output[0] = 1.0
             else:
                 output[0] = 0.0
-            #punishing type 1 error
-            if xo[0] == 0 and output[0] == 1:
-                genome.fitness -= 5.0
-            #punishing type 2 error
-            if xo[0] == 1 and output[0] == 0:
-                genome.fitness -= 3.0
+            #updating error
+            genome.fitness -= abs(xo[0] - output[0]) 
             
+    
 
            
 #########################################
@@ -247,14 +236,9 @@ def run(config_file):
                     Test_Output[0] = 1.0
                 else:
                     Test_Output[0] = 0.0
-                #punishing type 1 error
-                if to[0] == 0 and Test_Output[0] == 1:
-                    testing_error -= 5.0
-                #punishing type 2 error
-                if to[0] == 1 and Test_Output[0] == 0:
-                    testing_error -= 3.0
-
-                #testing_error -= abs(to[0] - Test_Output[0])
+                #updating error
+                testing_error -= abs(to[0] - Test_Output[0])
+            
                 Outputs.append(Test_Output[0])
 
             # This line will add a new row to the CSV containing all of the outputs from the testing data
