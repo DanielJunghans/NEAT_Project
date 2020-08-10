@@ -35,11 +35,11 @@ TrainingGenerations = 50
 with open('UnNormalized.csv') as f:
     data = [line for line in csv.reader(f)]
     header = data[0]
-    content = [tuple(map(float, line)) for line in data[2:]]
+    content = [tuple(map(float, line)) for line in data[1:]]
      
 #this section creates the input list
 Input_List = []
-for input in range(len(content)-1):
+for input in range(len(content)):
     Input_List.append(tuple(content[input]))
 
 #this opens the file with the expected outputs
@@ -52,7 +52,7 @@ with open('tslaexpectedoutputs.csv') as a:
 Output_List = []
 
 CSV_Output_List = []
-for out in range(1,len(content)):
+for out in range(len(content)):
     Output = [output_content[out][0]]
     Output_List.append(tuple(Output))
     CSV_Output_List.append(Output[0])
@@ -69,5 +69,9 @@ Training_Output = Output_List[:split]
 Testing_Output= Output_List[split:]
 CSV_Output = CSV_Output_List[split:]
 
-print(len(Training_Input))
-print(len(Testing_Input))
+
+
+
+
+
+
